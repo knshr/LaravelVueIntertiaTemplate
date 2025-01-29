@@ -19,6 +19,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // $this->app->bind(\App\Services\Contracts\UserServiceInterface::class, \App\Services\Concrete\UserService::class);
     }
 }
