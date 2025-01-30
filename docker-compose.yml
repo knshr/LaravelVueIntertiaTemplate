@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: laravel_app
+        restart: unless-stopped
+        working_dir: /var/www/html
+        volumes:
+            - .:/var/www/html
+            - /var/www/html/node_modules
+        networks:
+            - app_network
+        extra_hosts:
+            - "myapptemplatel11.local:127.0.0.1"
+
+    webserver:
+        image: nginx:alpine
+        container_name: laravel_nginx
+        restart: unless-stopped
+        ports:
+            - "80:80"
+        volumes:
+            - .:/var/www/html
+            - ./nginx.conf:/etc/nginx/conf.d/default.conf
+        networks:
+            - app_network
+        extra_hosts:
+            - "myapptemplatel11.local:127.0.0.1"
+
+    db:
+        image: mysql:8.0
+        container_name: laravel_mysql
+        restart: unless-stopped
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+        volumes:
+            - db_data:/var/lib/mysql
+        networks:
+            - app_network
+
+volumes:
+    db_data:
+
+networks:
+    app_network:
+        driver: bridge
