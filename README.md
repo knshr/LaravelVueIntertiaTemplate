@@ -1,66 +1,169 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# John Arby Arceo Test - Setup Guide
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This guide provides instructions to set up and run the Laravel 11 application using Docker on Windows, Linux, and Mac.
 
-## About Laravel
+## Prerequisites
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Ensure you have the following installed on your system:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+-   [Docker](https://www.docker.com/get-started)
+-   [Docker Compose](https://docs.docker.com/compose/install/)
+-   [Git](https://git-scm.com/downloads)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Installation Steps
 
-## Learning Laravel
+### 1. Create the Environment File
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Copy the example environment file:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+```sh
+cp .env.example .env
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Modify the `.env` file as needed, ensuring database credentials match the Docker setup (ensure the DB_HOST is mysql to connect to docker mysql):
 
-## Laravel Sponsors
+```
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=your_database
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 2. Build and Start the Containers
 
-### Premium Partners
+Run the following command to build and start the Docker containers:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+```sh
+docker-compose up -d --build
+```
 
-## Contributing
+This will start the following services:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+-   **app** (Laravel application running PHP-FPM)
+-   **nginx** (Web server for Laravel, accessible via `http://viptutorstest.local`)
+-   **mysql** (Database service)
 
-## Code of Conduct
+### 3. Install Laravel Dependencies
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Run the following command inside the `app` container:
 
-## Security Vulnerabilities
+```sh
+docker exec -it laravel-app bash -c "composer install && php artisan key:generate"
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 4. Run Database Migrations
 
-## License
+For Database Migration please wait for 2-5 mins as it may take a while to initialize inside the docker container
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```sh
+docker exec -it laravel-app bash -c "php artisan migrate"
+```
+
+### 5. Update Hosts File (Windows Only)
+
+If you are on Windows, you need to manually update your hosts file (Run Notepad as Administrator):
+
+```sh
+notepad C:\Windows\System32\drivers\etc\hosts
+```
+
+Add the following line at the bottom:
+
+```
+127.0.0.1  viptutorstest.local
+```
+
+For Linux/Mac users, modify `/etc/hosts` using:
+
+```sh
+sudo nano /etc/hosts
+```
+
+And add:
+
+```
+127.0.0.1  viptutorstest.local
+```
+
+Save the file and exit.
+
+### 6. Running Vite for Frontend Assets
+
+To run Vite and avoid CORS issues, execute:
+
+```sh
+docker exec -it laravel-app bash -c "npm run build"
+```
+
+### 7. Access the Application
+
+Once the setup is complete, visit:
+
+```
+http://viptutorstest.local
+```
+
+## Managing Containers
+
+### Stopping the Containers
+
+```sh
+docker-compose down
+```
+
+### Restarting the Containers
+
+```sh
+docker-compose up -d
+```
+
+### Viewing Logs
+
+```sh
+docker-compose logs -f
+```
+
+### Accessing the Laravel Container
+
+```sh
+docker exec -it laravel-app bash
+```
+
+## Troubleshooting
+
+### MySQL Connection Error
+
+If you see `SQLSTATE[HY000] [2002] Connection refused`, restart the MySQL container:
+
+```sh
+docker-compose restart mysql
+```
+
+### 504 Gateway Timeout
+
+If you encounter a **504 Gateway Timeout**, try increasing `fastcgi_read_timeout` in `nginx.conf` and restarting Nginx:
+
+```sh
+docker-compose restart nginx
+```
+
+### Permission Issues
+
+If you encounter file permission issues, run:
+
+```sh
+docker exec -it laravel-app bash -c "chmod -R 777 storage bootstrap/cache"
+```
+
+## Additional Notes
+
+-   Ensure Docker is running before executing commands.
+-   Restart the containers if you modify `.env`.
+
+---
+
+Happy coding! 🎉
+
+John Arby Arceo
