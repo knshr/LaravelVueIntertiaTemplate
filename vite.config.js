@@ -17,4 +17,19 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    server: {
+        host: "0.0.0.0",
+        port: 5173,
+        strictPort: true,
+        hmr: {
+            host: "viptutorstest.local",
+        },
+        cors: true,
+        // proxy: {
+        //     "/@vite": "http://localhost:5173",
+        // },
+        // cors: {
+        //     origin: "*",
+        // },
+    },
 });
