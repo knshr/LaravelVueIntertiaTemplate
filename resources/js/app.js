@@ -1,5 +1,5 @@
 import "./bootstrap";
-import "../css/app.css";
+// import "../css/app.css";/
 import { createApp, h } from "vue";
 import { createInertiaApp } from "@inertiajs/vue3";
 import { createBootstrap } from "bootstrap-vue-next";
@@ -10,7 +10,6 @@ import "bootstrap-vue-next/dist/bootstrap-vue-next.css";
 createInertiaApp({
     resolve: (name) => {
         const pages = import.meta.glob("./vue/Pages/**/*.vue", { eager: true });
-        console.log(pages);
 
         return pages[`./vue/Pages/${name}.vue`];
     },

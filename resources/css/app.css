@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
+/* * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -27,4 +27,4 @@ p {
 
 ul {
     margin-bottom: 0 !important;
-}
+} */

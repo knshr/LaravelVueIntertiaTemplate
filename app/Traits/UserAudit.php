@@ -42,6 +42,6 @@ trait UserAudit
 
     protected function getModifiedByColumn()
     {
-        return 'modified_by';
+        return 'updated_at';
     }
 }
