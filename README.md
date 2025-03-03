@@ -42,7 +42,7 @@ docker-compose up -d --build
 This will start the following services:
 
 -   **app** (Laravel application running PHP-FPM)
--   **nginx** (Web server for Laravel, accessible via `http://viptutorstest.local`)
+-   **nginx** (Web server for Laravel, accessible via `http://{local_domain_name}.local`)
 -   **mysql** (Database service)
 
 ### 3. Install Laravel Dependencies
@@ -72,7 +72,7 @@ notepad C:\Windows\System32\drivers\etc\hosts
 Add the following line at the bottom:
 
 ```
-127.0.0.1  viptutorstest.local
+127.0.0.1  {local_domain_name}.local
 ```
 
 For Linux/Mac users, modify `/etc/hosts` using:
@@ -84,7 +84,7 @@ sudo nano /etc/hosts
 And add:
 
 ```
-127.0.0.1  viptutorstest.local
+127.0.0.1  {local_domain_name}.local
 ```
 
 Save the file and exit.
@@ -102,7 +102,7 @@ docker exec -it laravel-app bash -c "npm run build"
 Once the setup is complete, visit:
 
 ```
-http://viptutorstest.local
+http://{local_domain_name}.local
 ```
 
 ## Managing Containers
