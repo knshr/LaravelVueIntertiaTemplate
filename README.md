@@ -1,13 +1,3 @@
-# Part 2: Form Request Validation
-
-## Question 2: How will you handle messy codes in the existing system?
-
-Dealing with messy code in an existing system requires patience and a well-thought-out approach to avoid breaking things. The first step is to understand the codebase—going through any documentation, tracing how data flows, and identifying dependencies. This helps spot problem areas like spaghetti code, redundant logic, or confusing variable names.
-
-Instead of diving in and rewriting everything at once, it's best to refactor gradually. Breaking down large functions, removing duplicate code, and applying SOLID principles can make the system more maintainable. Writing unit tests before making changes ensures nothing breaks, while version control (Git) keeps everything safe and trackable.
-
-Following coding standards like PSR, using Laravel Pint for formatting, and leveraging tools like PHPStan for static analysis help keep things clean. Clear comments and making good use of Laravel’s built-in features also improve readability and maintainability.
-
 # John Arby Arceo Test - Setup Guide
 
 This guide provides instructions to set up and run the Laravel 11 application using Docker on Windows, Linux, and Mac.
